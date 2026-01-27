@@ -1,6 +1,10 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="Sensor.Ingestor/Sensor.Ingestor.csproj" Id="1749c9b5-c527-45f7-867c-351f9ce2e6ac" />
     <Project Path="src/DataIngestorService.API/DataIngestorService.API.csproj" Id="2792524c-562d-425c-934b-214c09ff31d9" />
+    <Project Path="src/Sensor.API/Sensor.API.csproj" Id="4c2c6053-2720-45d3-9b0d-e3757a156681" />
+    <Project Path="src/Sensor.BLL/Sensor.BLL.csproj" Id="a4fc2f13-d642-478a-aa79-21988d9d736b" />
+    <Project Path="src/Sensor.DAL/Sensor.DAL.csproj" Id="eb3f4ecb-6639-41e5-bd9f-ab27a7e81a3d" />
     <Project Path="src/SensorProcessor/SensorProcessor.csproj" Id="91fd5b4e-88ba-40fe-8658-2efe5da928cb" />
     <Project Path="src/Shared/Shared.csproj" Id="ff60fce2-c8fa-4f6f-8a46-106c5ca60512" />
   </Folder>

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sensor.DAL\Sensor.DAL.csproj" />
+  </ItemGroup>
+
 </Project>
