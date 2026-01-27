@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "src\\Sensor.Ingestor\\Sensor.Ingestor.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\Sensor.Processor\\Sensor.Processor.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
