@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DataIngestorService.API/DataIngestorService.API.csproj" Id="2792524c-562d-425c-934b-214c09ff31d9" />
+    <Project Path="src/SensorProcessor/SensorProcessor.csproj" Id="91fd5b4e-88ba-40fe-8658-2efe5da928cb" />
+    <Project Path="src/Shared/Shared.csproj" Id="ff60fce2-c8fa-4f6f-8a46-106c5ca60512" />
+  </Folder>
+</Solution>
