@@ -1,6 +1,6 @@
-﻿namespace Sensor.Ingestor.Settings
+﻿namespace Shared.Settings
 {
-    public class RabbitMqSettings
+    public class RabbitMQSettings
     {
         public string Host { get; set; }
         public string VirtualHost { get; set; }
