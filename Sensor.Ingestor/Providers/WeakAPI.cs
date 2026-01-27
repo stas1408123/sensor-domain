@@ -1,9 +1,9 @@
-﻿using Sensor.Ingestor.HttpClient.Abstarction;
-using Sensor.Ingestor.Models;
+﻿using Sensor.Ingestor.Models;
+using Sensor.Ingestor.Providers.Abstarction;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Sensor.Ingestor.HttpClient
+namespace Sensor.Ingestor.Providers
 {
     public class WeakAPI : IWeakAPI
     {

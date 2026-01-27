@@ -1,15 +1,15 @@
-﻿using Sensor.Ingestor.HttpClient;
-using Sensor.Ingestor.Models;
+﻿using Sensor.Ingestor.Models;
+using Sensor.Ingestor.Providers.Abstarction;
 using Sensor.Ingestor.Services.Abstraction;
 
 namespace Sensor.Ingestor.Services
 {
     public class IngestorService : IIngestorService
     {
-        public readonly SensorPublisherService sensorPublisherService;
-        public readonly WeakAPI weakAPI;
+        public readonly ISensorPublisherService sensorPublisherService;
+        public readonly IWeakAPI weakAPI;
 
-        public IngestorService(SensorPublisherService sensorPublisherService, WeakAPI weakAPI)
+        public IngestorService(ISensorPublisherService sensorPublisherService, IWeakAPI weakAPI)
         {
             this.sensorPublisherService = sensorPublisherService;
             this.weakAPI = weakAPI;
@@ -23,7 +23,6 @@ namespace Sensor.Ingestor.Services
             {
                 await sensorPublisherService.Publish(sensorData);
             }
-            return data;
         }
     }
 }

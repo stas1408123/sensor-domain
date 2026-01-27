@@ -1,25 +1,40 @@
+using Hangfire;
+using Hangfire.MemoryStorage;
 using MassTransit;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Extensions.Http;
-using Sensor.Ingestor.HttpClient;
+using Sensor.Ingestor.Providers;
+using Sensor.Ingestor.Providers.Abstarction;
 using Sensor.Ingestor.Services;
 using Sensor.Ingestor.Services.Abstraction;
 using Sensor.Ingestor.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 
-
+AddHangFire(builder);
 AddWeakAPIDependencies(builder);
 AddBusDependepcies(builder);
 
 builder.Services.AddScoped<IIngestorService, IngestorService>();
 builder.Services.AddScoped<ISensorPublisherService, SensorPublisherService>();
+builder.Services.AddScoped<IWeakAPI, WeakAPI>();
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseHangfireDashboard();
+}
+
 app.MapGet("/", () => "Hello World!");
+
+RecurringJob.AddOrUpdate<IIngestorService>(
+    "IngestJob",
+    service => service.Ingest(),
+    "*/5 * * * *");
 
 app.Run();
 
@@ -54,4 +69,15 @@ static void AddBusDependepcies(WebApplicationBuilder builder)
             cfg.ConfigureEndpoints(context);
         });
     });
+}
+
+static void AddHangFire(WebApplicationBuilder builder)
+{
+    var hangfireSection = builder.Configuration.GetSection("Hangfire");
+    var useInMemory = hangfireSection.GetValue<bool>("InMemory");
+    if (useInMemory)
+    {
+        builder.Services.AddHangfire(config => config.UseMemoryStorage());
+    }
+    builder.Services.AddHangfireServer();
 }

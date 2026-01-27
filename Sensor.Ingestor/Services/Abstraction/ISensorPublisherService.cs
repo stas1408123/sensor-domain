@@ -2,8 +2,8 @@
 
 namespace Sensor.Ingestor.Services.Abstraction
 {
-    interface ISensorPublisherService
+    public interface ISensorPublisherService
     {
-        Task Publish(SensorData data);
+        public Task Publish(SensorData data);
     }
 }

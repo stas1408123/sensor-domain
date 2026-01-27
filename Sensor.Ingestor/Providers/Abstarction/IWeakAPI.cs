@@ -1,9 +1,9 @@
 ﻿using Sensor.Ingestor.Models;
 
-namespace Sensor.Ingestor.HttpClient.Abstarction
+namespace Sensor.Ingestor.Providers.Abstarction
 {
-    interface IWeakAPI
+    public interface IWeakAPI
     {
-        Task<List<SensorData>> GetDataAsync();
+        public Task<List<SensorData>> GetDataAsync();
     }
 }
