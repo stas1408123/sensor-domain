@@ -9,6 +9,7 @@ using Sensor.Ingestor.Providers.Abstarction;
 using Sensor.Ingestor.Services;
 using Sensor.Ingestor.Services.Abstraction;
 using Sensor.Ingestor.Settings;
+using Shared.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +56,7 @@ static void AddWeakAPIDependencies(WebApplicationBuilder builder)
 
 static void AddBusDependepcies(WebApplicationBuilder builder)
 {
-    var rabbitMqSettings = builder.Configuration.GetSection("RabbitMq").Get<RabbitMqSettings>();
+    var rabbitMqSettings = builder.Configuration.GetSection("RabbitMq").Get<RabbitMQSettings>();
     builder.Services.AddMassTransit(x =>
     {
         x.UsingRabbitMq((context, cfg) =>
