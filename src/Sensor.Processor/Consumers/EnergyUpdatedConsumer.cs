@@ -1,14 +1,34 @@
 ﻿using MassTransit;
+using Sensor.DAL.Entities;
+using Sensor.DAL.Repositories.Abstarction;
 using Shared.Events;
 
 namespace SensorProcessor.Consumers
 {
-    public class EnergyUpdatedConsumer : IConsumer<EnergyUpdated>
+    public class EnergyUpdatedConsumer(IGenericRepository<RoomEntity> repository) : IConsumer<EnergyUpdated>
     {
-        public Task Consume(ConsumeContext<EnergyUpdated> context)
+        public async Task Consume(ConsumeContext<EnergyUpdated> context)
         {
-            Console.WriteLine(context.Message);
-            return Task.CompletedTask;
+            var message = context.Message;
+
+            EnergyEntity energy = new EnergyEntity();
+            energy.ConsumptionEnergy = message.Energy;
+            energy.Timestamp = message.Timestamp;
+
+            var room = (await repository.Get(x => x.Name == message.Name)).FirstOrDefault();
+
+            if (room != null)
+            {
+                room.Energies.Add(energy);
+                await repository.Update(room);
+                return;
+            }
+
+            room = new RoomEntity();
+            room.Name = message.Name;
+
+            room.Energies.Add(energy);
+            await repository.Add(room);
         }
     }
 }

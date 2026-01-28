@@ -1,6 +1,7 @@
 using MassTransit;
 using SensorProcessor.Consumers;
 using Shared.Settings;
+using Sensor.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(context);
     });
 });
+
+builder.Services.AddDataAccess(builder.Configuration);
 var app = builder.Build();
 
 app.Run();
