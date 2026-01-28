@@ -35,7 +35,7 @@ app.MapGet("/", () => "Hello World!");
 RecurringJob.AddOrUpdate<IIngestorService>(
     "IngestJob",
     service => service.Ingest(),
-    "*/5 * * * *");
+    "*/1 * * * *");
 
 app.Run();
 
