@@ -3,10 +3,7 @@
     public class Room
     {
         public Guid Id { get; set; }
-        public Guid RoomId { get; set; }
-
-        public Room room { get; set; }
-        public Guid Name { get; set; }
+        public string Name { get; set; }
 
         public List<AirQuality> airQualities = new List<AirQuality>();
 

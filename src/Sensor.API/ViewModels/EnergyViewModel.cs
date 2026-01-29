@@ -1,13 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Sensor.DAL.Entities
+﻿namespace Sensor.API.ViewModels
 {
-    public class EnergyEntity
+    public class EnergyViewModel
     {
-        [Key]
         public Guid Id { get; set; }
         public Guid RoomId { get; set; }
-        public RoomEntity Room { get; set; }
         public double ConsumptionEnergy { get; set; }
         public DateTime Timestamp { get; set; }
     }

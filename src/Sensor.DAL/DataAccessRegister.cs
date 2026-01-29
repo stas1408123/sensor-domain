@@ -11,9 +11,10 @@ namespace Sensor.DAL
         public static void AddDataAccess(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            services.AddDbContext<SensorDbContext>((options) =>
+            var connectionString = config.GetConnectionString("PostgreSqlConnection");
+            services.AddDbContext<SensorDbContext>(options =>
             {
-                options.UseInMemoryDatabase("SensorDB");
+                options.UseNpgsql(connectionString);
             });
         }
     }
