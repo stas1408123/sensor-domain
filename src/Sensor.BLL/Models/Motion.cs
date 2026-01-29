@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Sensor.DAL.Entities
+﻿namespace Sensor.BLL.Models
 {
-    public class MotionEntity
+    public class Motion
     {
-        [Key]
         public Guid Id { get; set; }
         public Guid RoomId { get; set; }
-        public RoomEntity Room { get; set; }
+        public Room Room { get; set; }
         public bool MotionDetected { get; set; }
         public DateTime Timestamp { get; set; }
     }

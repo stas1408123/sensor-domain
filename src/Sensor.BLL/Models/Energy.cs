@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Sensor.DAL.Entities
+﻿namespace Sensor.BLL.Models
 {
-    public class EnergyEntity
+    public class Energy
     {
-        [Key]
         public Guid Id { get; set; }
         public Guid RoomId { get; set; }
-        public RoomEntity Room { get; set; }
+        public Room Room { get; set; }
         public double ConsumptionEnergy { get; set; }
         public DateTime Timestamp { get; set; }
     }

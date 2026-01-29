@@ -1,13 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Sensor.DAL.Entities
+﻿namespace Sensor.BLL.Models
 {
-    public class AirQualityEntity
+    public class AirQuality
     {
-        [Key]
         public Guid Id { get; set; }
         public Guid RoomId { get; set; }
-        public RoomEntity Room { get; set; }
+        public Room Room { get; set; }
         public int Co2 { get; set; }
         public int Pm25 { get; set; }
         public int Humidity { get; set; }

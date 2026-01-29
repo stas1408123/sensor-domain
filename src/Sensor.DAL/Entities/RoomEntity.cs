@@ -6,9 +6,6 @@ namespace Sensor.DAL.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public Guid RoomId { get; set; }
-
-        public RoomEntity Room { get; set; }
         public string Name { get; set; }
 
         public List<AirQualityEntity> AirQualities = new List<AirQualityEntity>();
