@@ -1,52 +1,129 @@
 name: Build Sensor Domain Apps
 
 on:
+  push:
+    branches:
+      - feature/*
   workflow_dispatch:
 
 jobs:
-  build:
+  # API
+  build-api:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '10.0.x'
-
-      # API
       - name: Restore API dependencies
         run: dotnet restore src/Sensor.API/Sensor.API.csproj
-
       - name: Build API
         run: dotnet build --no-restore src/Sensor.API/Sensor.API.csproj --configuration Release
 
-      # Ingestor
+  # INGESTOR
+  build-ingestor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '10.0.x'
       - name: Restore Ingestor dependencies
         run: dotnet restore src/Sensor.Ingestor/Sensor.Ingestor.csproj
-
       - name: Build Ingestor
         run: dotnet build --no-restore src/Sensor.Ingestor/Sensor.Ingestor.csproj --configuration Release
 
-      # Processor
+  # PROCESSOR
+  build-processor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '10.0.x'
       - name: Restore Processor dependencies
         run: dotnet restore src/Sensor.Processor/Sensor.Processor.csproj
-
       - name: Build Processor
         run: dotnet build --no-restore src/Sensor.Processor/Sensor.Processor.csproj --configuration Release
 
-      # Notification
+  # NOTIFICATION
+  build-notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '10.0.x'
       - name: Restore Notification dependencies
         run: dotnet restore src/Sensor.Notification/Sensor.Notification.csproj
-
       - name: Build Notification
         run: dotnet build --no-restore src/Sensor.Notification/Sensor.Notification.csproj --configuration Release
 
-        # Shared
+  # SHARED
+  build-shared:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '10.0.x'
       - name: Restore Shared dependencies
-        run: dotnet restore src/Sensor.Shared/Sensor.Shared.csproj
-
+        run: dotnet restore src/Shared/Shared.csproj
       - name: Build Shared
-        run: dotnet build --no-restore src/Sensor.Shared/Sensor.Shared.csproj --configuration Release
+        run: dotnet build --no-restore src/Shared/Shared.csproj --configuration Release
+
+  # SonarQube Analysis
+  SonarQube:
+    needs:
+      - build-api
+      - build-ingestor
+      - build-processor
+      - build-notification
+      - build-shared
+    runs-on: windows-latest
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'zulu' # Alternative distribution options are available.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Cache SonarQube Cloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~\sonar\cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache SonarQube Cloud scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}\scanner
+          key: ${{ runner.os }}-sonar-scanner
+          restore-keys: ${{ runner.os }}-sonar-scanner
+      - name: Install SonarQube Cloud scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: powershell
+        run: |
+          New-Item -Path ${{ runner.temp }}\scanner -ItemType Directory
+          dotnet tool update dotnet-sonarscanner --tool-path ${{ runner.temp }}\scanner
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        shell: powershell
+        run: |
+          ${{ runner.temp }}\scanner\dotnet-sonarscanner begin /k:"stas1408123_sensor-domain" /o:"stas1408123" /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          dotnet build
+          ${{ runner.temp }}\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
