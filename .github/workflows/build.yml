@@ -1,0 +1,52 @@
+name: Build Sensor Domain Apps
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '10.0.x'
+
+      # API
+      - name: Restore API dependencies
+        run: dotnet restore src/Sensor.API/Sensor.API.csproj
+
+      - name: Build API
+        run: dotnet build --no-restore src/Sensor.API/Sensor.API.csproj --configuration Release
+
+      # Ingestor
+      - name: Restore Ingestor dependencies
+        run: dotnet restore src/Sensor.Ingestor/Sensor.Ingestor.csproj
+
+      - name: Build Ingestor
+        run: dotnet build --no-restore src/Sensor.Ingestor/Sensor.Ingestor.csproj --configuration Release
+
+      # Processor
+      - name: Restore Processor dependencies
+        run: dotnet restore src/Sensor.Processor/Sensor.Processor.csproj
+
+      - name: Build Processor
+        run: dotnet build --no-restore src/Sensor.Processor/Sensor.Processor.csproj --configuration Release
+
+      # Notification
+      - name: Restore Notification dependencies
+        run: dotnet restore src/Sensor.Notification/Sensor.Notification.csproj
+
+      - name: Build Notification
+        run: dotnet build --no-restore src/Sensor.Notification/Sensor.Notification.csproj --configuration Release
+
+        # Shared
+      - name: Restore Shared dependencies
+        run: dotnet restore src/Sensor.Shared/Sensor.Shared.csproj
+
+      - name: Build Shared
+        run: dotnet build --no-restore src/Sensor.Shared/Sensor.Shared.csproj --configuration Release
