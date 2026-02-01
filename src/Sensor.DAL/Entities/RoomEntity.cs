@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sensor.DAL.Entities
 {
@@ -6,12 +8,13 @@ namespace Sensor.DAL.Entities
     {
         [Key]
         public Guid Id { get; set; }
+
         public string Name { get; set; }
 
-        public List<AirQualityEntity> AirQualities = new List<AirQualityEntity>();
+        public List<AirQualityEntity> AirQualities { get; set; } = new List<AirQualityEntity>();
 
-        public List<EnergyEntity> Energies = new List<EnergyEntity>();
+        public List<EnergyEntity> Energies { get; set; } = new List<EnergyEntity>();
 
-        public List<MotionEntity> Motions = new List<MotionEntity>();
+        public List<MotionEntity> Motions { get; set; } = new List<MotionEntity>();
     }
 }

@@ -1,18 +1,19 @@
 ﻿using MassTransit;
 using Sensor.DAL.Entities;
 using Sensor.DAL.Repositories.Abstarction;
+using Sensor.Processor.Producers;
 using Shared.Events;
 
 namespace SensorProcessor.Consumers
 {
-    public class MotionUpdatedConsumer(IGenericRepository<RoomEntity> repository) : IConsumer<MotionUpdated>
+    public class MotionUpdatedConsumer(IGenericRepository<RoomEntity> repository, INotificationPublisher notificationPublisher) : IConsumer<MotionUpdated>
     {
         public async Task Consume(ConsumeContext<MotionUpdated> context)
         {
 
             var message = context.Message;
 
-            MotionEntity motion = new MotionEntity();
+            var motion = new MotionEntity();
             motion.MotionDetected = message.MotionDetected;
             motion.Timestamp = message.Timestamp;
 
@@ -22,6 +23,7 @@ namespace SensorProcessor.Consumers
             {
                 room.Motions.Add(motion);
                 await repository.Update(room);
+                await PublishNotification(room);
                 return;
             }
 
@@ -30,6 +32,15 @@ namespace SensorProcessor.Consumers
 
             room.Motions.Add(motion);
             await repository.Add(room);
+            await PublishNotification(room);
+        }
+
+        private async Task PublishNotification(RoomEntity room)
+        {
+            var notification = new RoomUpdated();
+            notification.Type = Reason.MotionUpdated;
+            notification.RoomId = room.Id;
+            await notificationPublisher.Publish(notification);
         }
     }
 }
