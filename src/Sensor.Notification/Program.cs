@@ -1,18 +1,17 @@
 using MassTransit;
-using SensorProcessor.Consumers;
+using Sensor.Notification.Consumers;
+using Sensor.Notification.Hubs;
 using Shared.Settings;
-using Sensor.DAL;
-using Sensor.Processor.Producers;
 
 var builder = WebApplication.CreateBuilder(args);
-
 var rabbitMqSettings = builder.Configuration.GetSection("RabbitMq").Get<RabbitMQSettings>();
+
+
+builder.Services.AddSignalR();
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<AirQualityUpdatedConsumer>();
-    x.AddConsumer<EnergyUpdatedConsumer>();
-    x.AddConsumer<MotionUpdatedConsumer>();
+    x.AddConsumer<RoomUpdatedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -21,18 +20,16 @@ builder.Services.AddMassTransit(x =>
             h.Username(rabbitMqSettings.Username);
             h.Password(rabbitMqSettings.Password);
         });
-        cfg.UseMessageRetry(r =>
-        {
-            r.Incremental(3, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2));
-        });
 
         cfg.ConfigureEndpoints(context);
     });
 });
 builder.Services.AddMassTransitHostedService();
-builder.Services.AddScoped<INotificationPublisher, NotificationPublisher>();
-
-builder.Services.AddDataAccess(builder.Configuration);
 var app = builder.Build();
+
+app.MapGet("/", () => "Hello World!");
+
+app.MapHub<RoomNotificationHub>("/roomNotification");
+
 
 app.Run();

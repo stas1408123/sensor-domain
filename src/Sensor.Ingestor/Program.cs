@@ -70,8 +70,8 @@ static void AddBusDependepcies(WebApplicationBuilder builder)
             cfg.ConfigureEndpoints(context);
         });
     });
+    builder.Services.AddMassTransitHostedService();
 }
-
 static void AddHangFire(WebApplicationBuilder builder)
 {
     var hangfireSection = builder.Configuration.GetSection("Hangfire");

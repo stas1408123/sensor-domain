@@ -47,7 +47,7 @@ namespace Sensor.DAL.Repositories
 
         public async virtual Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> predicate)
         {
-            return await _dbSet.AsNoTracking().Where(predicate).ToListAsync();
+            return await _dbSet.Where(predicate).ToListAsync();
         }
 
         public async Task<TEntity> Update(TEntity entity)
