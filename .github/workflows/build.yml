@@ -1,9 +1,6 @@
 name: Build Sensor Domain Apps
 
 on:
-  push:
-    branches:
-      - feature/*
   workflow_dispatch:
 
 jobs:
