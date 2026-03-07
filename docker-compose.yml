@@ -1,0 +1,85 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: sensor-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  sensor-api:
+    build:
+      context: .
+      dockerfile: src/Sensor.API/Dockerfile
+    container_name: sensor-api
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__PostgreSqlConnection: Host=host.docker.internal;Port=5432;Database=SensorDb;Username=postgres;Password=postgres
+    ports:
+      - "5266:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  sensor-ingestor:
+    build:
+      context: .
+      dockerfile: src/Sensor.Ingestor/Dockerfile
+    container_name: sensor-ingestor
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      RabbitMq__Host: rabbitmq
+      RabbitMq__VirtualHost: /
+      RabbitMq__Username: guest
+      RabbitMq__Password: guest
+    ports:
+      - "5167:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  sensor-notification:
+    build:
+      context: .
+      dockerfile: src/Sensor.Notification/Dockerfile
+    container_name: sensor-notification
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      RabbitMq__Host: rabbitmq
+      RabbitMq__VirtualHost: /
+      RabbitMq__Username: guest
+      RabbitMq__Password: guest
+    ports:
+      - "5017:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  sensor-processor:
+    build:
+      context: .
+      dockerfile: src/Sensor.Processor/Dockerfile
+    container_name: sensor-processor
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      RabbitMq__Host: rabbitmq
+      RabbitMq__VirtualHost: /
+      RabbitMq__Username: guest
+      RabbitMq__Password: guest
+      ConnectionStrings__PostgreSqlConnection: Host=host.docker.internal;Port=5432;Database=SensorDb;Username=postgres;Password=postgres
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
