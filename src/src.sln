@@ -1,0 +1,60 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sensor.Processor", "Sensor.Processor\Sensor.Processor.csproj", "{EDB452AF-12F0-20E3-99D6-B8BC3EAE841B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sensor.BLL", "Sensor.BLL\Sensor.BLL.csproj", "{525310D3-BC6D-D015-C330-2D1347D9E184}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sensor.Notification", "Sensor.Notification\Sensor.Notification.csproj", "{0591265F-3603-64DB-E3B3-1F5900405687}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{22F72E50-B86A-48A6-4252-6FDC98C636E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sensor.API", "Sensor.API\Sensor.API.csproj", "{D09FD2F1-A31A-356D-E0E4-F2819114FD53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sensor.Ingestor", "Sensor.Ingestor\Sensor.Ingestor.csproj", "{A915ABE6-3539-C89D-2C42-1C1973FBAA17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sensor.DAL", "Sensor.DAL\Sensor.DAL.csproj", "{8A709035-2FCF-D1DC-47DB-8A716DE475A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDB452AF-12F0-20E3-99D6-B8BC3EAE841B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB452AF-12F0-20E3-99D6-B8BC3EAE841B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB452AF-12F0-20E3-99D6-B8BC3EAE841B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB452AF-12F0-20E3-99D6-B8BC3EAE841B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{525310D3-BC6D-D015-C330-2D1347D9E184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{525310D3-BC6D-D015-C330-2D1347D9E184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{525310D3-BC6D-D015-C330-2D1347D9E184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{525310D3-BC6D-D015-C330-2D1347D9E184}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0591265F-3603-64DB-E3B3-1F5900405687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0591265F-3603-64DB-E3B3-1F5900405687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0591265F-3603-64DB-E3B3-1F5900405687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0591265F-3603-64DB-E3B3-1F5900405687}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F72E50-B86A-48A6-4252-6FDC98C636E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F72E50-B86A-48A6-4252-6FDC98C636E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F72E50-B86A-48A6-4252-6FDC98C636E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F72E50-B86A-48A6-4252-6FDC98C636E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D09FD2F1-A31A-356D-E0E4-F2819114FD53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D09FD2F1-A31A-356D-E0E4-F2819114FD53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D09FD2F1-A31A-356D-E0E4-F2819114FD53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D09FD2F1-A31A-356D-E0E4-F2819114FD53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A915ABE6-3539-C89D-2C42-1C1973FBAA17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A915ABE6-3539-C89D-2C42-1C1973FBAA17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A915ABE6-3539-C89D-2C42-1C1973FBAA17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A915ABE6-3539-C89D-2C42-1C1973FBAA17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A709035-2FCF-D1DC-47DB-8A716DE475A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A709035-2FCF-D1DC-47DB-8A716DE475A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A709035-2FCF-D1DC-47DB-8A716DE475A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A709035-2FCF-D1DC-47DB-8A716DE475A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C7336D9-1345-43D2-9BCE-8E494F747C3D}
+	EndGlobalSection
+EndGlobal
