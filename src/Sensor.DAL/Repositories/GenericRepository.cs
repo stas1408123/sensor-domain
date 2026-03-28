@@ -6,8 +6,8 @@ namespace Sensor.DAL.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        SensorDbContext _context;
-        DbSet<TEntity> _dbSet;
+        protected SensorDbContext _context;
+        protected DbSet<TEntity> _dbSet;
 
         public GenericRepository(SensorDbContext context)
         {
