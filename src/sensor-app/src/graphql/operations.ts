@@ -57,4 +57,3 @@ export const GET_ROOM_BY_ID = gql`
     }
   }
 `;
-

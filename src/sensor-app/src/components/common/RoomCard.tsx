@@ -1,4 +1,10 @@
-import { Card, CardActionArea, CardContent, Typography, Stack } from '@mui/material';
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  Typography,
+  Stack,
+} from '@mui/material';
 import type { RoomViewModel } from '../../types/graphql';
 
 interface RoomCardProps {
@@ -62,7 +68,10 @@ export function RoomCard({ room, onOpen }: RoomCardProps) {
 
   return (
     <Card variant="outlined" sx={cardSx}>
-      <CardActionArea onClick={onOpen} aria-label={`Open details for ${room.name}`}>
+      <CardActionArea
+        onClick={onOpen}
+        aria-label={`Open details for ${room.name}`}
+      >
         <CardContent>
           <Typography variant="h6" gutterBottom>
             {room.name}
@@ -97,4 +106,3 @@ export function RoomCard({ room, onOpen }: RoomCardProps) {
     </Card>
   );
 }
-

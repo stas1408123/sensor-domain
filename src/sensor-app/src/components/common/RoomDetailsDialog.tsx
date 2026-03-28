@@ -38,7 +38,9 @@ export function RoomDetailsDialog({ room, onClose }: RoomDetailsDialogProps) {
     >
       {room && (
         <>
-          <DialogTitle sx={{ textAlign: 'center', bgcolor: 'transparent' }}>{room.name}</DialogTitle>
+          <DialogTitle sx={{ textAlign: 'center', bgcolor: 'transparent' }}>
+            {room.name}
+          </DialogTitle>
           <DialogContent dividers sx={{ bgcolor: 'transparent' }}>
             <Stack spacing={2}>
               <Typography variant="body2" color="text.secondary">
@@ -52,7 +54,9 @@ export function RoomDetailsDialog({ room, onClose }: RoomDetailsDialogProps) {
               <Divider />
             </Stack>
           </DialogContent>
-          <DialogActions sx={{ justifyContent: 'center', bgcolor: 'transparent' }}>
+          <DialogActions
+            sx={{ justifyContent: 'center', bgcolor: 'transparent' }}
+          >
             <Button onClick={onClose} variant="contained">
               Close
             </Button>

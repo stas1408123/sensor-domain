@@ -15,4 +15,3 @@ export function useRoomById(id: string) {
     variables: { id },
   });
 }
-

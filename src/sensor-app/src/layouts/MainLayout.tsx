@@ -9,4 +9,3 @@ function MainLayout({ children }: PropsWithChildren) {
 }
 
 export default MainLayout;
-

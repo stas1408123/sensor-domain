@@ -46,4 +46,3 @@ export interface GetRoomByIdData {
 export interface GetRoomByIdVariables {
   id: string;
 }
-

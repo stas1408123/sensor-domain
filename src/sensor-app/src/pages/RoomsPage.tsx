@@ -1,5 +1,12 @@
 import { useState, useCallback } from 'react';
-import { Container, Grid, Typography, CircularProgress, Alert, Stack } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Typography,
+  CircularProgress,
+  Alert,
+  Stack,
+} from '@mui/material';
 import { useRooms } from '../hooks/useRooms';
 import { RoomCard, RoomDetailsDialog } from '../components';
 import type { RoomViewModel } from '../types/graphql';
@@ -17,7 +24,11 @@ function RoomsGrid({
   return (
     <Grid container spacing={2} columns={GRID_COLUMNS}>
       {rooms.map((room) => (
-        <Grid key={room.id} size={GRID_ITEM_SIZE} sx={{ display: 'flex', minWidth: 0 }}>
+        <Grid
+          key={room.id}
+          size={GRID_ITEM_SIZE}
+          sx={{ display: 'flex', minWidth: 0 }}
+        >
           <RoomCard room={room} onOpen={() => onRoomOpen(room)} />
         </Grid>
       ))}
@@ -34,7 +45,10 @@ function RoomsPage() {
   }, []);
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+    <Container
+      maxWidth="lg"
+      style={{ marginTop: '2rem', marginBottom: '2rem' }}
+    >
       <Stack direction="column" spacing={2}>
         <Typography variant="h4" component="h1" gutterBottom>
           Rooms overview
@@ -47,7 +61,9 @@ function RoomsPage() {
           </Stack>
         )}
 
-        {error && <Alert severity="error">Error loading rooms: {error.message}</Alert>}
+        {error && (
+          <Alert severity="error">Error loading rooms: {error.message}</Alert>
+        )}
 
         {data && data.rooms.length > 0 && (
           <RoomsGrid rooms={data.rooms} onRoomOpen={setDetailsRoom} />

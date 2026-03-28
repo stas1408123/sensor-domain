@@ -63,14 +63,28 @@ export function RoomMetricCharts({ room }: RoomMetricChartsProps) {
       </Typography>
       {airData.length > 0 ? (
         <ResponsiveContainer width="100%" height={chartHeight}>
-          <LineChart data={airData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+          <LineChart
+            data={airData}
+            margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="time" tick={{ fontSize: 11 }} interval="preserveStartEnd" />
+            <XAxis
+              dataKey="time"
+              tick={{ fontSize: 11 }}
+              interval="preserveStartEnd"
+            />
             <YAxis yAxisId="co2" tick={{ fontSize: 11 }} width={42} />
-            <YAxis yAxisId="other" orientation="right" tick={{ fontSize: 11 }} width={36} />
+            <YAxis
+              yAxisId="other"
+              orientation="right"
+              tick={{ fontSize: 11 }}
+              width={36}
+            />
             <Tooltip
               labelFormatter={(_, payload) =>
-                payload?.[0]?.payload?.ts ? new Date(payload[0].payload.ts).toLocaleString() : ''
+                payload?.[0]?.payload?.ts
+                  ? new Date(payload[0].payload.ts).toLocaleString()
+                  : ''
               }
             />
             <Legend />
@@ -109,18 +123,32 @@ export function RoomMetricCharts({ room }: RoomMetricChartsProps) {
         </Typography>
       )}
 
-      <Typography variant="subtitle1" fontWeight={600} gutterBottom sx={{ mt: 2 }}>
+      <Typography
+        variant="subtitle1"
+        fontWeight={600}
+        gutterBottom
+        sx={{ mt: 2 }}
+      >
         Energy consumption (over time)
       </Typography>
       {energyData.length > 0 ? (
         <ResponsiveContainer width="100%" height={chartHeight}>
-          <LineChart data={energyData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+          <LineChart
+            data={energyData}
+            margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="time" tick={{ fontSize: 11 }} interval="preserveStartEnd" />
+            <XAxis
+              dataKey="time"
+              tick={{ fontSize: 11 }}
+              interval="preserveStartEnd"
+            />
             <YAxis tick={{ fontSize: 11 }} width={48} />
             <Tooltip
               labelFormatter={(_, payload) =>
-                payload?.[0]?.payload?.ts ? new Date(payload[0].payload.ts).toLocaleString() : ''
+                payload?.[0]?.payload?.ts
+                  ? new Date(payload[0].payload.ts).toLocaleString()
+                  : ''
               }
             />
             <Legend />
@@ -140,20 +168,42 @@ export function RoomMetricCharts({ room }: RoomMetricChartsProps) {
         </Typography>
       )}
 
-      <Typography variant="subtitle1" fontWeight={600} gutterBottom sx={{ mt: 2 }}>
+      <Typography
+        variant="subtitle1"
+        fontWeight={600}
+        gutterBottom
+        sx={{ mt: 2 }}
+      >
         Motion (0 = none, 1 = detected)
       </Typography>
       {motionData.length > 0 ? (
         <ResponsiveContainer width="100%" height={chartHeight}>
-          <LineChart data={motionData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+          <LineChart
+            data={motionData}
+            margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="time" tick={{ fontSize: 11 }} interval="preserveStartEnd" />
-            <YAxis domain={[-0.1, 1.1]} ticks={[0, 1]} tick={{ fontSize: 11 }} width={32} />
+            <XAxis
+              dataKey="time"
+              tick={{ fontSize: 11 }}
+              interval="preserveStartEnd"
+            />
+            <YAxis
+              domain={[-0.1, 1.1]}
+              ticks={[0, 1]}
+              tick={{ fontSize: 11 }}
+              width={32}
+            />
             <Tooltip
               labelFormatter={(_, payload) =>
-                payload?.[0]?.payload?.ts ? new Date(payload[0].payload.ts).toLocaleString() : ''
+                payload?.[0]?.payload?.ts
+                  ? new Date(payload[0].payload.ts).toLocaleString()
+                  : ''
               }
-              formatter={(value: number) => [value === 1 ? 'Detected' : 'None', 'Motion']}
+              formatter={(value) => {
+                const n = value == null ? NaN : Number(value);
+                return [n === 1 ? 'Detected' : 'None', 'Motion'];
+              }}
             />
             <Legend />
             <Line
