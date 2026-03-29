@@ -4,6 +4,33 @@ on:
   workflow_dispatch:
 
 jobs:
+  # FE
+  build-frontend:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+        - name: Setup Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '22.x'
+            cache: 'npm'
+            cache-dependency-path: 'src/sensor-app/package.json'
+        - name: Install dependencies
+          working-directory: src/sensor-app
+          run: npm ci
+        - name: Lint
+          working-directory: src/sensor-app
+          run: npm run lint
+        - name: Build
+          working-directory: src/sensor-app
+          run: npm run build
+        - name: Upload build artifacts
+          uses: actions/upload-artifact@v4
+          with:
+            name: sensor-app-dist
+            path: src/sensor-app/dist/
+
   # API
   build-api:
     runs-on: ubuntu-latest
