@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using Sensor.DAL.Entities;
 using Sensor.DAL.Repositories.Abstarction;
 using Sensor.Processor.Producers;
@@ -6,11 +6,15 @@ using Shared.Events;
 
 namespace SensorProcessor.Consumers
 {
-    public class EnergyUpdatedConsumer(IGenericRepository<RoomEntity> repository, INotificationPublisher notificationPublisher) : IConsumer<EnergyUpdated>
+    public class EnergyUpdatedConsumer(
+        IGenericRepository<RoomEntity> repository,
+        INotificationPublisher notificationPublisher,
+        ILogger<EnergyUpdatedConsumer> logger) : IConsumer<EnergyUpdated>
     {
         public async Task Consume(ConsumeContext<EnergyUpdated> context)
         {
             var message = context.Message;
+            logger.LogInformation("Processing energy update for room {RoomName}", message.Name);
 
             var energy = new EnergyEntity();
             energy.ConsumptionEnergy = message.Energy;
@@ -24,6 +28,7 @@ namespace SensorProcessor.Consumers
                 room.Energies.Add(energy);
                 await repository.Update(room);
                 await PublishNotification(room);
+                logger.LogInformation("Updated existing room {RoomName} with energy data", room.Name);
                 return;
             }
 
@@ -33,6 +38,7 @@ namespace SensorProcessor.Consumers
             room.Energies.Add(energy);
             await repository.Add(room);
             await PublishNotification(room);
+            logger.LogInformation("Created room {RoomName} from energy data", room.Name);
         }
 
         private async Task PublishNotification(RoomEntity room)
