@@ -3,8 +3,17 @@ using SensorProcessor.Consumers;
 using Shared.Settings;
 using Sensor.DAL;
 using Sensor.Processor.Producers;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, services, loggerConfiguration) =>
+{
+    loggerConfiguration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .WriteTo.Console();
+});
 
 var rabbitMqSettings = builder.Configuration.GetSection("RabbitMq").Get<RabbitMQSettings>();
 
@@ -34,5 +43,6 @@ builder.Services.AddScoped<INotificationPublisher, NotificationPublisher>();
 
 builder.Services.AddDataAccess(builder.Configuration);
 var app = builder.Build();
+app.Logger.LogInformation("Sensor processor is starting");
 
 app.Run();

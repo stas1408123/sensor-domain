@@ -9,9 +9,18 @@ using Sensor.Ingestor.Providers.Abstarction;
 using Sensor.Ingestor.Services;
 using Sensor.Ingestor.Services.Abstraction;
 using Sensor.Ingestor.Settings;
+using Serilog;
 using Shared.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((context, services, loggerConfiguration) =>
+{
+    loggerConfiguration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .WriteTo.Console();
+});
 
 builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 
@@ -24,6 +33,7 @@ builder.Services.AddScoped<ISensorPublisherService, SensorPublisherService>();
 builder.Services.AddScoped<IWeakAPI, WeakAPI>();
 
 var app = builder.Build();
+app.Logger.LogInformation("Sensor ingestor is starting");
 
 if (app.Environment.IsDevelopment())
 {
@@ -36,6 +46,7 @@ RecurringJob.AddOrUpdate<IIngestorService>(
     "IngestJob",
     service => service.Ingest(),
     "*/1 * * * *");
+app.Logger.LogInformation("Hangfire recurring job IngestJob configured to run every minute");
 
 app.Run();
 
@@ -52,6 +63,7 @@ static void AddWeakAPIDependencies(WebApplicationBuilder builder)
         client.Timeout = TimeSpan.FromSeconds(30);
     }).AddPolicyHandler(retryPolicy);
     builder.Services.AddScoped<WeakAPI>();
+    Log.Information("Weak API client configured with retry count {RetryCount}", apiSettings.RetryCount);
 }
 
 static void AddBusDependepcies(WebApplicationBuilder builder)
@@ -71,6 +83,7 @@ static void AddBusDependepcies(WebApplicationBuilder builder)
         });
     });
     builder.Services.AddMassTransitHostedService();
+    Log.Information("MassTransit configured for RabbitMQ host {Host}", rabbitMqSettings.Host);
 }
 static void AddHangFire(WebApplicationBuilder builder)
 {
