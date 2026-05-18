@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Sensor.DAL.Repositories.Abstarction;
 using System.Linq.Expressions;
 
@@ -33,7 +33,7 @@ namespace Sensor.DAL.Repositories
             }
         }
 
-        public async Task<TEntity> GetById(Guid id)
+        public virtual async Task<TEntity> GetById(Guid id)
         {
             return await _dbSet.FindAsync(id);
         }

@@ -17,6 +17,17 @@ var rabbitMqSettings = builder.Configuration.GetSection("RabbitMq").Get<RabbitMQ
 
 
 builder.Services.AddSignalR();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+            .SetIsOriginAllowed(_ => true)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 builder.Services.AddMassTransit(x =>
 {
@@ -38,6 +49,8 @@ builder.Services.AddMassTransitHostedService();
 Log.Information("MassTransit configured for RabbitMQ host {Host}", rabbitMqSettings.Host);
 var app = builder.Build();
 app.Logger.LogInformation("Sensor notification service is starting");
+
+app.UseCors();
 
 app.MapGet("/", () => "Hello World!");
 
