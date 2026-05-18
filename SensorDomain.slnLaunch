@@ -6,16 +6,6 @@
         "Path": "src\\Sensor.Ingestor\\Sensor.Ingestor.csproj",
         "Action": "Start",
         "DebugTarget": "https"
-      },
-      {
-        "Path": "src\\Sensor.Processor\\Sensor.Processor.csproj",
-        "Action": "Start",
-        "DebugTarget": "https"
-      },
-      {
-        "Path": "src\\Sensor.Notification\\Sensor.Notification.csproj",
-        "Action": "Start",
-        "DebugTarget": "https"
       }
     ]
   }

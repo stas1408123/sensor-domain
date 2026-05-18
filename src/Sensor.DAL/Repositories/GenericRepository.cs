@@ -40,8 +40,6 @@ namespace Sensor.DAL.Repositories
 
         public async virtual Task<IReadOnlyList<TEntity>> GetAll()
         {
-            Console.WriteLine("________________________________________________________");
-            Console.WriteLine(_context.ContextId);
             return await _dbSet.AsNoTracking().ToListAsync();
         }
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sensor.DAL.Entities;
@@ -12,6 +12,7 @@ namespace Sensor.DAL
         public static void AddDataAccess(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<IGenericRepository<RoomEntity>, RoomRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
             var connectionString = config.GetConnectionString("PostgreSqlConnection");
             services.AddDbContext<SensorDbContext>(options =>
             {

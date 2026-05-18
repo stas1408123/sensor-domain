@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import { useQuery } from '@apollo/client/react';
 import {
   Container,
   Grid,
@@ -6,8 +7,12 @@ import {
   CircularProgress,
   Alert,
   Stack,
+  TextField,
+  Button,
+  Pagination,
+  Divider,
 } from '@mui/material';
-import { useRooms } from '../hooks/useRooms';
+import { GET_ROOMS_WITH_PAGINATION_AND_DATE_FILTER } from '../graphql/operations';
 import { RoomCard, RoomDetailsDialog } from '../components';
 import type { RoomViewModel } from '../types/graphql';
 
@@ -37,12 +42,50 @@ function RoomsGrid({
 }
 
 function RoomsPage() {
-  const { data, loading, error } = useRooms();
+  const [fromDateInput, setFromDateInput] = useState('');
+  const [toDateInput, setToDateInput] = useState('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(9);
   const [detailsRoom, setDetailsRoom] = useState<RoomViewModel | null>(null);
+
+  const variables = useMemo(
+    () => ({
+      from: fromDate ? new Date(fromDate).toISOString() : null,
+      to: toDate ? new Date(toDate).toISOString() : null,
+      page,
+      pageSize,
+    }),
+    [fromDate, toDate, page, pageSize]
+  );
+
+  const { data, loading, error } = useQuery<{ rooms: RoomViewModel[] }>(
+    GET_ROOMS_WITH_PAGINATION_AND_DATE_FILTER,
+    { variables }
+  );
 
   const closeDetails = useCallback(() => {
     setDetailsRoom(null);
   }, []);
+
+  const handleApplyFilter = useCallback(() => {
+    setFromDate(fromDateInput);
+    setToDate(toDateInput);
+    setPage(1);
+  }, [fromDateInput, toDateInput]);
+
+  const handleResetFilter = useCallback(() => {
+    setFromDateInput('');
+    setToDateInput('');
+    setFromDate('');
+    setToDate('');
+    setPage(1);
+  }, []);
+
+  const rooms = data?.rooms ?? [];
+  const hasNextPage = rooms.length === pageSize;
+  const paginationCount = hasNextPage ? page + 1 : page;
 
   return (
     <Container
@@ -53,6 +96,33 @@ function RoomsPage() {
         <Typography variant="h4" component="h1" gutterBottom>
           Rooms overview
         </Typography>
+
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems={{ xs: 'stretch', md: 'center' }}>
+          <TextField
+            label="From"
+            type="datetime-local"
+            size="small"
+            value={fromDateInput}
+            onChange={(event) => setFromDateInput(event.target.value)}
+            InputLabelProps={{ shrink: true }}
+          />
+          <TextField
+            label="To"
+            type="datetime-local"
+            size="small"
+            value={toDateInput}
+            onChange={(event) => setToDateInput(event.target.value)}
+            InputLabelProps={{ shrink: true }}
+          />
+          <Button variant="contained" onClick={handleApplyFilter}>
+            Apply
+          </Button>
+          <Button variant="outlined" onClick={handleResetFilter}>
+            Reset
+          </Button>
+        </Stack>
+
+        <Divider />
 
         {loading && (
           <Stack direction="row" alignItems="center" spacing={2}>
@@ -65,13 +135,24 @@ function RoomsPage() {
           <Alert severity="error">Error loading rooms: {error.message}</Alert>
         )}
 
-        {data && data.rooms.length > 0 && (
-          <RoomsGrid rooms={data.rooms} onRoomOpen={setDetailsRoom} />
+        {data && rooms.length > 0 && (
+          <RoomsGrid rooms={rooms} onRoomOpen={setDetailsRoom} />
         )}
 
-        {data && data.rooms.length === 0 && !loading && !error && (
+        {data && rooms.length === 0 && !loading && !error && (
           <Typography>No rooms found.</Typography>
         )}
+
+        <Stack direction="row" justifyContent="center">
+          <Pagination
+            page={page}
+            count={paginationCount}
+            color="primary"
+            onChange={(_, value) => setPage(value)}
+            showFirstButton
+            showLastButton
+          />
+        </Stack>
       </Stack>
 
       <RoomDetailsDialog room={detailsRoom} onClose={closeDetails} />
