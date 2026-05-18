@@ -11,6 +11,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/roomNotification': {
+        target: 'http://localhost:5017',
+        changeOrigin: true,
+        ws: true,
+      },
     },
   },
 });

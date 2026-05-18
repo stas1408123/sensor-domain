@@ -10,6 +10,16 @@ namespace Sensor.DAL.Repositories
         {
         }
 
+        public override async Task<RoomEntity> GetById(Guid id)
+        {
+            return await _dbSet
+                .AsNoTracking()
+                .Include(x => x.AirQualities)
+                .Include(x => x.Energies)
+                .Include(x => x.Motions)
+                .FirstAsync(x => x.Id == id);
+        }
+
         public override async Task<IReadOnlyList<RoomEntity>> GetAll()
         {
             return await _dbSet
