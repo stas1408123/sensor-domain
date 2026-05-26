@@ -151,7 +151,7 @@ jobs:
   # SonarQube Analysis
   SonarQube:
     needs:
-      - build-sensor-app
+      - build-frontend
       - build-api
       - build-ingestor
       - build-processor
