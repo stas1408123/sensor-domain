@@ -30,7 +30,12 @@ export const GET_ROOMS = gql`
 `;
 
 export const GET_ROOMS_WITH_PAGINATION_AND_DATE_FILTER = gql`
-  query GetRoomsWithPaginationAndDateFilter($from: DateTime, $to: DateTime, $page: Int, $pageSize: Int) {
+  query GetRoomsWithPaginationAndDateFilter(
+    $from: DateTime
+    $to: DateTime
+    $page: Int
+    $pageSize: Int
+  ) {
     rooms(from: $from, to: $to, page: $page, pageSize: $pageSize) {
       id
       name
