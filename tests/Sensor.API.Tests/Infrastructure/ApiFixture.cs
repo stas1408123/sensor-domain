@@ -5,20 +5,31 @@ namespace Sensor.API.Tests.Infrastructure;
 
 public sealed class ApiFixture : IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("postgres:16-alpine")
-        .Build();
+    public const string CiConnectionEnvVar = "POSTGRES_TEST_CONNECTION";
+
+    private PostgreSqlContainer? _postgres;
 
     public ApiWebApplicationFactory Factory { get; private set; } = null!;
 
     public async Task InitializeAsync()
     {
-        await _postgres.StartAsync();
-        Factory = new ApiWebApplicationFactory(_postgres.GetConnectionString());
+        var connectionString = Environment.GetEnvironmentVariable(CiConnectionEnvVar);
+
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            _postgres = new PostgreSqlBuilder("postgres:16-alpine").Build();
+            await _postgres.StartAsync();
+            connectionString = _postgres.GetConnectionString();
+        }
+
+        Factory = new ApiWebApplicationFactory(connectionString);
     }
 
     public async Task DisposeAsync()
     {
         await Factory.DisposeAsync();
-        await _postgres.DisposeAsync();
+
+        if (_postgres is not null)
+            await _postgres.DisposeAsync();
     }
 }
