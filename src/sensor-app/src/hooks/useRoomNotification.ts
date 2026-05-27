@@ -45,7 +45,10 @@ export function useRoomUpdateNotification(
   enabled: boolean,
 ) {
   const onUpdateRef = useRef(onUpdate);
-  onUpdateRef.current = onUpdate;
+
+  useEffect(() => {
+    onUpdateRef.current = onUpdate;
+  }, [onUpdate]);
 
   useEffect(() => {
     if (!enabled) {

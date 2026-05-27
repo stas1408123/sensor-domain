@@ -39,7 +39,10 @@ app.Logger.LogInformation("Sensor API is starting");
 
 // Configure the HTTP request pipeline.
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthorization();
 app.MapGraphQL();
@@ -48,3 +51,7 @@ app.MapGraphQL();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program
+{
+}

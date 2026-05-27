@@ -57,12 +57,12 @@ function RoomsPage() {
       page,
       pageSize,
     }),
-    [fromDate, toDate, page, pageSize]
+    [fromDate, toDate, page, pageSize],
   );
 
   const { data, loading, error } = useQuery<{ rooms: RoomViewModel[] }>(
     GET_ROOMS_WITH_PAGINATION_AND_DATE_FILTER,
-    { variables }
+    { variables },
   );
 
   const closeDetails = useCallback(() => {
@@ -97,7 +97,11 @@ function RoomsPage() {
           Rooms overview
         </Typography>
 
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems={{ xs: 'stretch', md: 'center' }}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={2}
+          alignItems={{ xs: 'stretch', md: 'center' }}
+        >
           <TextField
             label="From"
             type="datetime-local"

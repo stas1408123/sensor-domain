@@ -106,9 +106,68 @@ jobs:
       - name: Build Shared
         run: dotnet build --no-restore src/Shared/Shared.csproj --configuration Release
 
+  # API integration tests
+  test-api:
+    needs: build-api
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: SensorDb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d SensorDb"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      POSTGRES_TEST_CONNECTION: Host=localhost;Port=5432;Database=SensorDb;Username=postgres;Password=postgres
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Run API integration tests
+        run: dotnet test tests/Sensor.API.Tests/Sensor.API.Tests.csproj --configuration Release --verbosity normal
+
+  # Processor unit tests
+  test-processor:
+    needs: build-processor
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Run Processor unit tests
+        run: dotnet test tests/Sensor.Processor.Tests/Sensor.Processor.Tests.csproj --configuration Release --verbosity normal
+
+  # Notification unit tests
+  test-notification:
+    needs: build-notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Run Notification unit tests
+        run: dotnet test tests/Sensor.Notification.Tests/Sensor.Notification.Tests.csproj --configuration Release --verbosity normal
+
   # SonarQube Analysis
   SonarQube:
     needs:
+      - build-frontend
       - build-api
       - build-ingestor
       - build-processor
