@@ -17,6 +17,17 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 // Add services to the container.
 
 builder.Services.AddControllers();
+var corsOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SensorApiCors", policy =>
+    {
+        policy.WithOrigins(corsOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services
     .AddGraphQLServer()
     .AddQueryType<RoomQuery>()
@@ -44,6 +55,7 @@ if (!app.Environment.IsEnvironment("Testing"))
     app.UseHttpsRedirection();
 }
 
+app.UseCors("SensorApiCors");
 app.UseAuthorization();
 app.MapGraphQL();
 

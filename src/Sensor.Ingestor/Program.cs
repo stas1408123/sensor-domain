@@ -55,15 +55,19 @@ static void AddWeakAPIDependencies(WebApplicationBuilder builder)
     var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiSettings>();
     var retryPolicy = HttpPolicyExtensions.HandleTransientHttpError()
         .RetryAsync(apiSettings.RetryCount);
+    var circuitBreakerPolicy = HttpPolicyExtensions.HandleTransientHttpError()
+        .CircuitBreakerAsync(handledEventsAllowedBeforeBreaking: apiSettings.CircuitBreaker.FailureThreshold, durationOfBreak: TimeSpan.FromSeconds(apiSettings.CircuitBreaker.DurationOfBreakSeconds));
+    var combinedPolicy = Policy.WrapAsync(retryPolicy, circuitBreakerPolicy);
+    
     builder.Services.AddHttpClient("WeakApiClient", (serviceProvider, client) =>
     {
         var apiSettings = serviceProvider.GetRequiredService<IOptions<ApiSettings>>().Value;
         client.BaseAddress = new Uri(apiSettings.BaseUrl);
         client.DefaultRequestHeaders.Add("X-Api-Key", apiSettings.ApiKey);
         client.Timeout = TimeSpan.FromSeconds(30);
-    }).AddPolicyHandler(retryPolicy);
+    }).AddPolicyHandler(combinedPolicy);
     builder.Services.AddScoped<WeakAPI>();
-    Log.Information("Weak API client configured with retry count {RetryCount}", apiSettings.RetryCount);
+    Log.Information("Weak API client configured with retry count {RetryCount} and circuit breaker ({FailureThreshold} failures, {DurationOfBreakSeconds}s break)", apiSettings.RetryCount, apiSettings.CircuitBreaker.FailureThreshold, apiSettings.CircuitBreaker.DurationOfBreakSeconds);
 }
 
 static void AddBusDependepcies(WebApplicationBuilder builder)
