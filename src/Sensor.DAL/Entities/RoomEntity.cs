@@ -9,7 +9,7 @@ namespace Sensor.DAL.Entities
         [Key]
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public List<AirQualityEntity> AirQualities { get; set; } = new List<AirQualityEntity>();
 
